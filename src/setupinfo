@@ -1,0 +1,7 @@
+DATABASE_URL =
+  "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMDFKWjJHRlQwMkMxNTNXV1NRNDczOUpXU0MiLCJ0ZW5hbnRfaWQiOiIwNzI0ZTMxY2E2YjY1NGU3MTVkZDljZjljM2E4NTJhMmIwYzdmMDIyNGZlZjE2MGYzMDg4OGI0ZDI2M2ZmZDIxIiwiaW50ZXJuYWxfc2VjcmV0IjoiNjZhMDYzZWItOGMxMy00ZmNlLWEyNDAtYTg1MjQ1MjY3NGFhIn0.Rzn3C2X1CguTKgjRv5ragyRRTPI9QUEWVmChrZ5Vx10";
+
+import { PrismaClient } from "@prisma/client/edge";
+import { withAccelerate } from "@prisma/extension-accelerate";
+
+const prisma = new PrismaClient().$extends(withAccelerate());
