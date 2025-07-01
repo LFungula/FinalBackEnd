@@ -1,3 +1,5 @@
+import { PrismaClient } from "@prisma/client/edge";
+import { withAccelerate } from "@prisma/extension-accelerate";
 
 import amenitiesData from "../src/data/amenities.json" with {type: 'json'};
 import bookingsData from "../src/data/bookings.json" with {type: 'json'};
@@ -5,10 +7,9 @@ import hostsData from "../src/data/hosts.json" with {type: 'json'};
 import propertiesData from "../src/data/properties.json" with {type: 'json'};
 import reviewsData from "../src/data/reviews.json" with {type: 'json'};
 import usersData from "../src/data/users.json" with {type: 'json'};
-import { PrismaClient } from "@prisma/client/edge";
-import { withAccelerate } from "@prisma/extension-accelerate";
 
-const prisma = new PrismaClient().$extends(withAccelerate());
+
+const prisma = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] }).$extends(withAccelerate());
 
 async function main() {
     const {amenities} = amenitiesData
@@ -19,54 +20,54 @@ async function main() {
     const {users} = usersData
 
 
-    for (const amenitie of amenities) {
-        await prisma.amenitie.upsert({
-            where: { id: amenitie.id },
+    for (const a of amenities) {
+        await prisma.a.upsert({
+            where: { id: a.id },
             update: {},
-            create: amenitie
+            create: a
                 })
             }
 
-    for (const booking of bookings) {
-    await prisma.booking.upsert({
-        where: { id: booking.id },
+    for (const b of bookings) {
+    await prisma.b.upsert({
+        where: { id: b.id },
         update: {},
-        create: booking
+        create: b
             })
         }
 
-    for (const host of hosts) {
-    await prisma.host.upsert({
-        where: { id: host.id },
+    for (const h of hosts) {
+    await prisma.h.upsert({
+        where: { id: h.id },
         update: {},
-        create: host
+        create: h
             })
         }
 
-    for (const property of properties) {
-    await prisma.property.upsert({
-        where: { id: property.id },
+    for (const p of properties) {
+    await prisma.p.upsert({
+        where: { id: p.id },
         update: {},
-        create: property
+        create: p
             })
         }    
 
-    for (const review of reviews) {
-    await prisma.review.upsert({
-        where: { id: review.id },
+    for (const r of reviews) {
+    await prisma.r.upsert({
+        where: { id: r.id },
         update: {},
-        create: review
+        create: r
             })
         }    
 
         
-    for (const user of users) {
-    await prisma.user.upsert({
-        where: { id: user.id },
-        update: {},
-        create: user
-            })
-        }    
+    for (const u of users) {
+    await prisma.u.upsert({
+      where: { id: u.id },
+      update: {},
+      create: u
+    })
+  }
 
 }
 
