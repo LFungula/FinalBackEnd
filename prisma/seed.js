@@ -20,55 +20,54 @@ async function main() {
     const {users} = usersData
 
 
-    for (const a of amenities) {
-        await prisma.a.upsert({
-            where: { id: a.id },
+    for (const amenity of amenities) {
+        await prisma.Amenities.upsert({
+            where: { id: amenity.id },
             update: {},
-            create: a
+            create: amenity
                 })
             }
 
-    for (const b of bookings) {
-    await prisma.b.upsert({
-        where: { id: b.id },
+    for (const booking of bookings) {
+    await prisma.Booking.upsert({
+        where: { id: booking.id },
         update: {},
-        create: b
+        create: booking
             })
         }
 
-    for (const h of hosts) {
-    await prisma.h.upsert({
-        where: { id: h.id },
+    for (const host of hosts) {
+    await prisma.Host.upsert({
+        where: { id: host.id },
         update: {},
-        create: h
+        create: host
             })
         }
 
-    for (const p of properties) {
-    await prisma.p.upsert({
-        where: { id: p.id },
+    for (const property of properties) {
+    await prisma.Property.upsert({
+        where: { id: property.id },
         update: {},
-        create: p
+        create: property
             })
         }    
 
-    for (const r of reviews) {
-    await prisma.r.upsert({
-        where: { id: r.id },
+    for (const review of reviews) {
+    await prisma.Review.upsert({
+        where: { id: review.id },
         update: {},
-        create: r
+        create: review
             })
         }    
 
         
-    for (const u of users) {
-    await prisma.u.upsert({
-      where: { id: u.id },
+    for (const user of users) {
+    await prisma.User.upsert({
+      where: { id: user.id },
       update: {},
-      create: u
+      create: user
     })
   }
-
 }
 
 main()
