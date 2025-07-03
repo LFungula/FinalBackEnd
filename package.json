@@ -19,6 +19,7 @@
     "@prisma/adapter-better-sqlite3": "^6.10.1",
     "@prisma/client": "^6.10.1",
     "@prisma/extension-accelerate": "^2.0.1",
+    "@sentry/cli": "^2.46.0",
     "@sentry/node": "^7.120.3",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",

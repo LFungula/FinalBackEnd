@@ -1,17 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 
-const deleteAmenityByID = (id) => {
-  const amenityIndex = amenitiesData.amenity.findIndex(
-    (amenity) => amenity.id === id
-  );
+const deleteAmenityByID = async (id) => {
+  const prisma = new PrismaClient();
+  const amenity = await prisma.Amenities.findUnique({ where: { id } });
 
-  if (amenityIndex === -1) {
+  if (!amenity) {
+    console.warn(`Amenity with ID ${id} not found for deletion.`);
     return null;
   }
 
-  const deletedcategory = amenitiesData.amenity.splice(amenityIndex, 1);
+  const deletedAmenity = await prisma.amenities.delete({
+    where: { id },
+  });
 
-  return deletedcategory;
+  return deletedAmenity; // Return the deleted amenity
 };
 
 export default deleteAmenityByID;
