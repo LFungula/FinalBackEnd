@@ -1,13 +1,20 @@
 import { PrismaClient } from "@prisma/client";
-const patchAmenityByID = async (name) => {
+const patchAmenityByID = async (id, name) => {
   const prisma = new PrismaClient();
 
-  const amenity = await prisma.amenities.patch({
-    id: uuidv4(),
-    name,
+  const amenity = await prisma.amenities.findUnique({ where: { id } });
+
+  if (!amenity) {
+    console.warn(`Amenity with ID ${id} not found.`);
+    return null;
+  }
+
+  const PatchedAmenity = await prisma.amenities.update({
+    where: { id },
+    data: { name },
   });
 
-  return amenity;
+  return PatchedAmenity;
 };
 
 export default patchAmenityByID;

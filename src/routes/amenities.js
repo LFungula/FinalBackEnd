@@ -4,37 +4,71 @@ import getAmenityByID from "../services/amenities/getAmenityByID.js";
 import patchAmenityByID from "../services/amenities/patchAmenityByID.js";
 import deleteAmenityByID from "../services/amenities/deleteAmenityByID.js";
 import createAmenity from "../services/amenities/createAmenity.js";
+//import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
-  const { name } = req.body;
-  const newAmenity = await createAmenity(name);
-  res.status(201).json(newAmenity);
+router.post("/", async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    const newAmenity = await createAmenity(name);
+    res.status(201).json(newAmenity);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get("/", async (req, res) => {
-  const amenities = await getAmenities();
-  res.status(200).json(amenities);
+router.get("/", async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    const amenities = await getAmenities(name);
+    res.status(200).json(amenities);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  const amenity = await getAmenityByID(id);
-  res.status(200).json(amenity);
+router.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const amenity = await getAmenityByID(id);
+
+    if (!amenity) {
+      res.status(404).json({ message: `amenity with id ${id} not found` });
+    }
+    res.status(200).json(amenity);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-  const amenity = await deleteAmenityByID(id);
-  res.status(200).json(amenity);
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const amenity = await deleteAmenityByID(id);
+
+    if (!amenity) {
+      res.status(404).json({ message: `amenity with id ${id} not found` });
+    }
+    res.status(200).json(amenity);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.patch("/:id", async (req, res) => {
-  const { id } = req.params;
-  const updatedData = req.body;
-  const amenity = await patchAmenityByID(id, updatedData);
-  res.status(200).json(amenity);
+router.patch("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    const amenity = await patchAmenityByID(id, { name });
+
+    if (!amenity) {
+      res.status(404).json({ message: `amenity with id ${id} not found` });
+    }
+    res.status(200).json(amenity);
+  } catch (error) {
+    next(error);
+  }
 });
 
 export default router;
