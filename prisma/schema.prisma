@@ -4,6 +4,7 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
@@ -12,6 +13,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model User {
@@ -21,25 +23,28 @@ model User {
   name        String
   email       String    @unique
   phoneNumber String    @unique
-  pictureUrl  String    @unique
-  booksings   Booking[]
+  profilePicture  String?   
+
+    bookings   Booking[]
   reviews     Review[]
+
 }
 
 model Booking {
-  id String @id @default(uuid())
+  id              String @id @default(uuid())
 
-  userId     String
-  propertyId String
+  userId          String
+  propertyId      String
 
-  checkinDate    DateTime
-  checkoutDate   DateTime
-  numberOfGuests Int
-  totalPrice     Int
-  bookingStatus String
+  checkinDate     DateTime
+  checkoutDate    DateTime
+  numberOfGuests  Int
+  totalPrice      Int
+  bookingStatus   String
 
-  user     User     @relation(fields: [userId], references: [id])
-  property Property @relation(fields: [propertyId], references: [id])
+  user            User     @relation(fields: [userId], references: [id])
+  property        Property @relation(fields: [propertyId], references: [id])
+
 }
 
 model Review {
@@ -51,6 +56,7 @@ model Review {
 
   user     User     @relation(fields: [userId], references: [id])
   property Property @relation(fields: [propertyId], references: [id])
+
 }
 
 model Property {
@@ -60,13 +66,14 @@ model Property {
   description   String
   location      String
   pricePerNight Float
-  bedroomCount  Int
-  bathroomCount Int
-  maxGuestCount Int
-  rating        Int
-  booksings     Booking[]
+  bedroomCount  Int?
+  bathRoomCount Int?
+  maxGuestCount Int?
+  rating        Int?
+
+  bookings       Booking[]
   reviews       Review[]
-  amenities     Amenities[]
+  amenities Amenities[]
 
   host Host @relation(fields: [hostId], references: [id])
 }
@@ -74,7 +81,9 @@ model Property {
 model Amenities {
   id       String     @id @default(uuid())
   name     String
+
   property Property[]
+
 }
 
 model Host {
@@ -84,7 +93,9 @@ model Host {
   name        String
   email       String     @unique
   phoneNumber String     @unique
-  pictureUrl  String     @unique
+  profilePicture  String?    
   aboutMe     String?
+
   listings    Property[]
+
 }
