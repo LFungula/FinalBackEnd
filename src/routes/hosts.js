@@ -75,8 +75,24 @@ router.delete("/:id", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name } = req.body;
-    const host = await updateHostByID(id, { name });
+    const {
+      username,
+      password,
+      name,
+      email,
+      phoneNumber,
+      profilePicture,
+      aboutMe,
+    } = req.body;
+    const host = await updateHostByID(id, {
+      username,
+      password,
+      name,
+      email,
+      phoneNumber,
+      profilePicture,
+      aboutMe,
+    });
 
     if (!host) {
       res.status(404).json({ message: `Host with id ${id} not found` });
