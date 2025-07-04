@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-const patchAmenityByID = async (id, name) => {
+const updatedAmenityByID = async (id, name) => {
   const prisma = new PrismaClient();
 
   const amenity = await prisma.amenities.findUnique({ where: { id } });
@@ -17,4 +17,4 @@ const patchAmenityByID = async (id, name) => {
   return PatchedAmenity;
 };
 
-export default patchAmenityByID;
+export default updatedAmenityByID;

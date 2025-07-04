@@ -1,7 +1,7 @@
 import { Router } from "express";
 import getAmenities from "../services/amenities/getAmenities.js";
 import getAmenityByID from "../services/amenities/getAmenityByID.js";
-import patchAmenityByID from "../services/amenities/patchAmenityByID.js";
+import updatedAmenityByID from "../services/amenities/updatedAmenityByID.js";
 import deleteAmenityByID from "../services/amenities/deleteAmenityByID.js";
 import createAmenity from "../services/amenities/createAmenity.js";
 //import auth from "../middleware/auth.js";
@@ -56,11 +56,11 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-router.patch("/:id", async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
-    const amenity = await patchAmenityByID(id, { name });
+    const amenity = await updatedAmenityByID(id, { name });
 
     if (!amenity) {
       res.status(404).json({ message: `amenity with id ${id} not found` });
