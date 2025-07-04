@@ -7,7 +7,14 @@ const createBooking = async (name) => {
   const newBooking = await prisma.booking.create({
     data: {
       id: uuidv4(), // pass id inside the "data" object
-      name,
+      userId,
+      propertyId,
+      propertyId,
+      checkinDate,
+      checkoutDate,
+      numberOfGuests,
+      totalPrice,
+      bookingStatus,
     },
   });
 

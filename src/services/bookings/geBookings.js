@@ -1,11 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 
-const getBookings = async (name) => {
+const getBookings = async (userId) => {
   const prisma = new PrismaClient();
   const Booking = await prisma.booking.findMany({
     where: {
-      name: {
-        contains: name,
+      userId: {
+        contains: userId,
       },
     },
   });
