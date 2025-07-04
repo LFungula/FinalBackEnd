@@ -4,6 +4,11 @@ import "dotenv/config";
 
 import loginRtouter from "./routes/login.js";
 import amenitiesRouter from "./routes/amenities.js";
+import bookingsRouter from "./routes/bookings.js";
+import hostsRouter from "./routes/hosts.js";
+import propertiesRouter from "./routes/properties.js";
+import reviewsRouter from "./routes/reviews.js";
+import usersRouter from "./routes/users.js";
 
 //middleware
 import log from "./middleware/logMiddleware.js";
@@ -43,6 +48,12 @@ app.get("/debug-sentry", function mainHandler(req, res) {
   throw new Error("My first Sentry error!");
 });
 app.use("/amenities", amenitiesRouter);
+app.use("/bookings", bookingsRouter);
+app.use("/hosts", hostsRouter);
+app.use("/properties", propertiesRouter);
+app.use("/reviews", reviewsRouter);
+app.use("/users", usersRouter);
+
 app.get("/debug-sentry", function mainHandler(req, res) {
   throw new Error("My first Sentry error!");
 });
