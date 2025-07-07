@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
+const prisma = new PrismaClient();
+
 const createBooking = async (
   userId,
   propertyId,
@@ -10,11 +12,9 @@ const createBooking = async (
   totalPrice,
   bookingStatus
 ) => {
-  const prisma = new PrismaClient();
-
   const newBooking = await prisma.booking.create({
     data: {
-      id: uuidv4(), // pass id inside the "data" object
+      id: uuidv4(),
       userId,
       propertyId,
       checkinDate,

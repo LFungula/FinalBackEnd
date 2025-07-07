@@ -28,8 +28,8 @@ router.post("/", async (req, res, next) => {
 
 router.get("/", async (req, res, next) => {
   try {
-    const { location, pricePerNight } = req.body;
-    const users = await getUsers(location, pricePerNight);
+    const { username, email } = req.query;
+    const users = await getUsers(username, email);
     res.status(200).json(users);
   } catch (error) {
     next(error);
@@ -42,7 +42,7 @@ router.get("/:id", async (req, res, next) => {
     const user = await getUserByID(id);
 
     if (!user) {
-      res.status(404).json({ message: `User with id ${id} not found` });
+      return res.status(404).json({ message: `User with id ${id} not found` });
     }
     res.status(200).json(user);
   } catch (error) {
@@ -56,7 +56,7 @@ router.delete("/:id", async (req, res, next) => {
     const user = await deleteUserByID(id);
 
     if (!user) {
-      res.status(404).json({ message: `User with id ${id} not found` });
+      return res.status(404).json({ message: `User with id ${id} not found` });
     }
     res.status(200).json(user);
   } catch (error) {
@@ -79,7 +79,7 @@ router.put("/:id", async (req, res, next) => {
     });
 
     if (!user) {
-      res.status(404).json({ message: `User with id ${id} not found` });
+      return res.status(404).json({ message: `User with id ${id} not found` });
     }
     res.status(200).json(user);
   } catch (error) {

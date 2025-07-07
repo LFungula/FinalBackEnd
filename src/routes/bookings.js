@@ -36,7 +36,7 @@ router.post("/", async (req, res, next) => {
 
 router.get("/", async (req, res, next) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.query;
     const bookings = await getBookings(userId);
     res.status(200).json(bookings);
   } catch (error) {
@@ -50,7 +50,9 @@ router.get("/:id", async (req, res, next) => {
     const booking = await getBookingByID(id);
 
     if (!booking) {
-      res.status(404).json({ message: `Booking with id ${id} not found` });
+      return res
+        .status(404)
+        .json({ message: `Booking with id ${id} not found` });
     }
     res.status(200).json(booking);
   } catch (error) {
@@ -64,7 +66,9 @@ router.delete("/:id", async (req, res, next) => {
     const booking = await deleteBookingByID(id);
 
     if (!booking) {
-      res.status(404).json({ message: `Booking with id ${id} not found` });
+      return res
+        .status(404)
+        .json({ message: `Booking with id ${id} not found` });
     }
     res.status(200).json(booking);
   } catch (error) {
@@ -95,7 +99,9 @@ router.put("/:id", async (req, res, next) => {
     });
 
     if (!booking) {
-      res.status(404).json({ message: `Booking with id ${id} not found` });
+      return res
+        .status(404)
+        .json({ message: `Booking with id ${id} not found` });
     }
     res.status(200).json(booking);
   } catch (error) {

@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
-
+const prisma = new PrismaClient();
 const createProperty = async (
   hostId,
   title,
@@ -12,8 +12,6 @@ const createProperty = async (
   maxGuestCount,
   rating
 ) => {
-  const prisma = new PrismaClient();
-
   const newProperty = await prisma.property.create({
     data: {
       id: uuidv4(), // pass id inside the "data" object

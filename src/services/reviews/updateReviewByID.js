@@ -1,4 +1,9 @@
-const updateReviewByID = async (id, name) => {
+import { PrismaClient } from "@prisma/client";
+
+const updateReviewByID = async (
+  id,
+  { userId, propertyId, rating, comment }
+) => {
   const prisma = new PrismaClient();
 
   const review = await prisma.review.findUnique({ where: { id } });
@@ -11,15 +16,10 @@ const updateReviewByID = async (id, name) => {
   const updatedReview = await prisma.review.update({
     where: { id },
     data: {
-      hostId,
-      title,
-      description,
-      location,
-      pricePerNight,
-      bedroomCount,
-      bathRoomCount,
-      maxGuestCount,
+      userId,
+      propertyId,
       rating,
+      comment,
     },
   });
 

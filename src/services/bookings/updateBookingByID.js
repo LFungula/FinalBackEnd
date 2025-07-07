@@ -1,6 +1,18 @@
-const updateBookingByID = async (id, name) => {
-  const prisma = new PrismaClient();
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
+const updateBookingByID = async (
+  id,
+  {
+    userId,
+    propertyId,
+    checkinDate,
+    checkoutDate,
+    numberOfGuests,
+    totalPrice,
+    bookingStatus,
+  }
+) => {
   const booking = await prisma.booking.findUnique({ where: { id } });
 
   if (!booking) {

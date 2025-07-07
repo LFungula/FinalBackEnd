@@ -20,8 +20,7 @@ router.post("/", async (req, res, next) => {
 
 router.get("/", async (req, res, next) => {
   try {
-    const { location, pricePerNight } = req.body;
-    const reviews = await getReviews(location, pricePerNight);
+    const reviews = await getReviews();
     res.status(200).json(reviews);
   } catch (error) {
     next(error);
@@ -34,7 +33,9 @@ router.get("/:id", async (req, res, next) => {
     const review = await getReviewByID(id);
 
     if (!review) {
-      res.status(404).json({ message: `Review with id ${id} not found` });
+      return res
+        .status(404)
+        .json({ message: `Review with id ${id} not found` });
     }
     res.status(200).json(review);
   } catch (error) {
@@ -48,7 +49,9 @@ router.delete("/:id", async (req, res, next) => {
     const review = await deleteReviewByID(id);
 
     if (!review) {
-      res.status(404).json({ message: `Review with id ${id} not found` });
+      return res
+        .status(404)
+        .json({ message: `Review with id ${id} not found` });
     }
     res.status(200).json(review);
   } catch (error) {
@@ -68,7 +71,9 @@ router.put("/:id", async (req, res, next) => {
     });
 
     if (!review) {
-      res.status(404).json({ message: `Review with id ${id} not found` });
+      return res
+        .status(404)
+        .json({ message: `Review with id ${id} not found` });
     }
     res.status(200).json(review);
   } catch (error) {

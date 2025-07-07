@@ -1,6 +1,9 @@
-const updateHostByID = async (id, name) => {
-  const prisma = new PrismaClient();
-
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+const updateHostByID = async (
+  id,
+  { username, password, name, email, phoneNumber, profilePicture, aboutMe }
+) => {
   const host = await prisma.host.findUnique({ where: { id } });
 
   if (!host) {

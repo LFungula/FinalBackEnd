@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 const getAmenityByID = async (id) => {
-  const prisma = new PrismaClient();
   const amenity = await prisma.amenities.findUnique({ where: { id } });
 
   return amenity;

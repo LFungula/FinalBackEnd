@@ -1,6 +1,18 @@
-const updatePropertyByID = async (id, name) => {
-  const prisma = new PrismaClient();
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
+const updatePropertyByID = async (
+  id,
+  hostId,
+  title,
+  description,
+  location,
+  pricePerNight,
+  bedroomCount,
+  bathRoomCount,
+  maxGuestCount,
+  rating
+) => {
   const property = await prisma.property.findUnique({ where: { id } });
 
   if (!property) {

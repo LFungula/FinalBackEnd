@@ -1,10 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-
+const prisma = new PrismaClient();
 const deleteBookingByID = async (id) => {
-  const prisma = new PrismaClient();
-  const Booking = await prisma.booking.findUnique({ where: { id } });
+  const booking = await prisma.booking.findUnique({ where: { id } });
 
-  if (!Booking) {
+  if (!booking) {
     console.warn(`Booking with ID ${id} not found for deletion.`);
     return null;
   }
@@ -13,7 +12,7 @@ const deleteBookingByID = async (id) => {
     where: { id },
   });
 
-  return deletedBooking; // Return the deleted Booking
+  return deletedBooking;
 };
 
 export default deleteBookingByID;

@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-
+const prisma = new PrismaClient();
 const deletePropertyByID = async (id) => {
-  const prisma = new PrismaClient();
   const property = await prisma.property.findUnique({ where: { id } });
 
   if (!property) {

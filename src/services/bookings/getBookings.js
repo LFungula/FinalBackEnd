@@ -1,16 +1,20 @@
 import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 const getBookings = async (userId) => {
-  const prisma = new PrismaClient();
-  const Booking = await prisma.booking.findMany({
-    where: {
-      userId: {
-        contains: userId,
-      },
-    },
-  });
+  let bookings;
 
-  return Booking;
+  if (userId) {
+    bookings = await prisma.booking.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+  } else {
+    bookings = await prisma.booking.findMany();
+  }
+
+  return bookings;
 };
 
 export default getBookings;

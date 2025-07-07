@@ -36,7 +36,7 @@ router.post("/", async (req, res, next) => {
 
 router.get("/", async (req, res, next) => {
   try {
-    const { name } = req.body;
+    const { name } = req.query;
     const hosts = await getHosts(name);
     res.status(200).json(hosts);
   } catch (error) {
@@ -50,7 +50,7 @@ router.get("/:id", async (req, res, next) => {
     const host = await getHostByID(id);
 
     if (!host) {
-      res.status(404).json({ message: `Host with id ${id} not found` });
+      return res.status(404).json({ message: `Host with id ${id} not found` });
     }
     res.status(200).json(host);
   } catch (error) {
@@ -64,7 +64,7 @@ router.delete("/:id", async (req, res, next) => {
     const host = await deleteHostByID(id);
 
     if (!host) {
-      res.status(404).json({ message: `Host with id ${id} not found` });
+      return res.status(404).json({ message: `Host with id ${id} not found` });
     }
     res.status(200).json(host);
   } catch (error) {
@@ -95,7 +95,7 @@ router.put("/:id", async (req, res, next) => {
     });
 
     if (!host) {
-      res.status(404).json({ message: `Host with id ${id} not found` });
+      return res.status(404).json({ message: `Host with id ${id} not found` });
     }
     res.status(200).json(host);
   } catch (error) {

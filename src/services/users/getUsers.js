@@ -1,17 +1,14 @@
 import { PrismaClient } from "@prisma/client";
-
-const getAmenities = async (name, email) => {
-  const prisma = new PrismaClient();
-  const amenity = await prisma.amenities.findMany({
+const prisma = new PrismaClient();
+const getUsers = async (username, email) => {
+  const user = await prisma.user.findMany({
     where: {
-      name: {
-        contains: name,
-      },
-      email: { contains: email },
+      username,
+      email,
     },
   });
 
-  return amenity;
+  return user;
 };
 
-export default getAmenities;
+export default getUsers;

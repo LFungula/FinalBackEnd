@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
+
 const deleteAmenityByID = async (id) => {
-  const prisma = new PrismaClient();
-  const amenity = await prisma.Amenities.findUnique({ where: { id } });
+  const amenity = await prisma.amenities.findUnique({ where: { id } });
 
   if (!amenity) {
     console.warn(`Amenity with ID ${id} not found for deletion.`);

@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 const getAmenities = async (name) => {
-  const prisma = new PrismaClient();
-  const amenity = await prisma.amenities.findMany({
+  const amenities = await prisma.amenities.findMany({
     where: {
       name: {
         contains: name,
@@ -10,7 +10,7 @@ const getAmenities = async (name) => {
     },
   });
 
-  return amenity;
+  return amenities;
 };
 
 export default getAmenities;
