@@ -70,7 +70,7 @@ router.delete("/:id", async (req, res, next) => {
         .status(404)
         .json({ message: `Booking with id ${id} not found` });
     }
-    res.status(200).json(booking);
+    res.status(200).json({ message: `Booking with id ${id} was deleted` });
   } catch (error) {
     next(error);
   }
@@ -88,22 +88,23 @@ router.put("/:id", async (req, res, next) => {
       totalPrice,
       bookingStatus,
     } = req.body;
-    const booking = await updateBookingByID(id, {
+    const booking = await updateBookingByID(
+      id,
       userId,
       propertyId,
       checkinDate,
       checkoutDate,
       numberOfGuests,
       totalPrice,
-      bookingStatus,
-    });
+      bookingStatus
+    );
 
     if (!booking) {
       return res
         .status(404)
-        .json({ message: `Booking with id ${id} not found` });
+        .json({ message: `booking with id ${id} not found` });
     }
-    res.status(200).json(booking);
+    res.status(200).json({ message: `booking with id ${id} was updated` });
   } catch (error) {
     next(error);
   }

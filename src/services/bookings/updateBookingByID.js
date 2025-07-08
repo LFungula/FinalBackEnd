@@ -3,15 +3,14 @@ const prisma = new PrismaClient();
 
 const updateBookingByID = async (
   id,
-  {
-    userId,
-    propertyId,
-    checkinDate,
-    checkoutDate,
-    numberOfGuests,
-    totalPrice,
-    bookingStatus,
-  }
+
+  userId,
+  propertyId,
+  checkinDate,
+  checkoutDate,
+  numberOfGuests,
+  totalPrice,
+  bookingStatus
 ) => {
   const booking = await prisma.booking.findUnique({ where: { id } });
 
@@ -23,17 +22,23 @@ const updateBookingByID = async (
   const updatedBooking = await prisma.booking.update({
     where: { id },
     data: {
-      userId,
-      propertyId,
-      checkinDate,
-      checkoutDate,
-      numberOfGuests,
-      totalPrice,
-      bookingStatus,
+      userId: userId,
+      propertyId: propertyId,
+      checkinDate: checkinDate,
+      checkoutDate: checkoutDate,
+      numberOfGuests: numberOfGuests,
+      totalPrice: totalPrice,
+      bookingStatus: bookingStatus,
     },
   });
 
-  return updatedBooking;
+  if (!updatedBooking || updatedBooking.count === 0) {
+    throw new NotFoundError("user", id);
+  }
+
+  return {
+    message: `User with id ${id} was updated!`,
+  };
 };
 
 export default updateBookingByID;

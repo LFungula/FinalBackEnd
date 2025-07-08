@@ -15,13 +15,13 @@ const createBooking = async (
   const newBooking = await prisma.booking.create({
     data: {
       id: uuidv4(),
-      userId,
-      propertyId,
-      checkinDate,
-      checkoutDate,
-      numberOfGuests,
-      totalPrice,
-      bookingStatus,
+      userId: userId,
+      propertyId: propertyId,
+      checkinDate: checkinDate,
+      checkoutDate: checkoutDate,
+      numberOfGuests: Number(numberOfGuests),
+      totalPrice: Number(totalPrice),
+      bookingStatus: bookingStatus,
     },
   });
 
