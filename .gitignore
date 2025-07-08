@@ -4,4 +4,4 @@ node_modules
 
 /src/generated/prisma
 ./setupinfo.txt
-./.env
+.env
