@@ -5,8 +5,8 @@ const prisma = new PrismaClient();
 const getProperties = async (location, pricePerNight) => {
   const property = await prisma.property.findMany({
     where: {
-      location,
-      pricePerNight,
+      location: location,
+      pricePerNight: Number(pricePerNight),
     },
   });
 
