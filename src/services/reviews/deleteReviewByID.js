@@ -9,7 +9,7 @@ const deleteReviewByID = async (id) => {
     return null;
   }
 
-  const deletedReview = await prisma.amenities.delete({
+  const deletedReview = await prisma.review.delete({
     where: { id },
   });
 
