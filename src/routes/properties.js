@@ -94,7 +94,8 @@ router.put("/:id", async (req, res, next) => {
       maxGuestCount,
       rating,
     } = req.body;
-    const property = await updatePropertyByID(id, {
+    const property = await updatePropertyByID(
+      id,
       hostId,
       title,
       description,
@@ -103,8 +104,8 @@ router.put("/:id", async (req, res, next) => {
       bedroomCount,
       bathRoomCount,
       maxGuestCount,
-      rating,
-    });
+      rating
+    );
 
     if (!property) {
       return res
