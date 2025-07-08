@@ -1,6 +1,16 @@
-const updateUserByID = async (id, name) => {
-  const prisma = new PrismaClient();
+import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
+
+const updateUserByID = async (
+  id,
+  username,
+  password,
+  name,
+  email,
+  phoneNumber,
+  profilePicture
+) => {
   const user = await prisma.user.findUnique({ where: { id } });
 
   if (!user) {
@@ -8,22 +18,25 @@ const updateUserByID = async (id, name) => {
     return null;
   }
 
-  const updatedUser = await prisma.user.update({
+  const updateUser = await prisma.user.updateMany({
     where: { id },
     data: {
-      hostId,
-      title,
-      description,
-      location,
-      pricePerNight,
-      bedroomCount,
-      bathRoomCount,
-      maxGuestCount,
-      rating,
+      username: username,
+      password: password,
+      name: name,
+      email: email,
+      phoneNumber: phoneNumber,
+      profilePicture: profilePicture,
     },
   });
 
-  return updatedUser;
+  if (!updateUser || updateUser.count === 0) {
+    throw new NotFoundError("user", id);
+  }
+
+  return {
+    message: `User with id ${id} was updated!`,
+  };
 };
 
 export default updateUserByID;

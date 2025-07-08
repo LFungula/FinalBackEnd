@@ -69,14 +69,15 @@ router.put("/:id", async (req, res, next) => {
     const { id } = req.params;
     const { username, password, name, email, phoneNumber, profilePicture } =
       req.body;
-    const user = await updateUserByID(id, {
+    const user = await updateUserByID(
+      id,
       username,
       password,
       name,
       email,
       phoneNumber,
-      profilePicture,
-    });
+      profilePicture
+    );
 
     if (!user) {
       return res.status(404).json({ message: `User with id ${id} not found` });
