@@ -17,8 +17,6 @@ import errorHandler from "./middleware/errorHandler.js";
 const app = express();
 
 // Sentry
-
-// Sentry
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   integrations: [
@@ -54,10 +52,6 @@ app.use("/properties", propertiesRouter);
 app.use("/reviews", reviewsRouter);
 app.use("/users", usersRouter);
 
-// app.get("/debug-sentry", function mainHandler(req, res) {
-//   throw new Error("My first Sentry error!");
-// });
-
 //Login
 app.use("/login", loginRtouter);
 
@@ -66,16 +60,8 @@ app.get("/", (req, res) => {
   res.send("Backend Final Lin Fungula");
 });
 
-//error:
-app.get("/debug-sentry", function mainHandler(req, res) {
-  throw new Error("My first Sentry error!");
-});
-
-// Trace errors
-// The error handler must be registered before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());
 
-// Error handling
 app.use(errorHandler);
 
 app.listen(3000, () => {

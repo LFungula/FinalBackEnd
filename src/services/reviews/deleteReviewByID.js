@@ -13,7 +13,7 @@ const deleteReviewByID = async (id) => {
     where: { id },
   });
 
-  return deletedReview; // Return the deleted review
+  return deletedReview;
 };
 
 export default deleteReviewByID;

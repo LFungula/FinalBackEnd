@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 const createAmenity = async (name) => {
   const newAmenity = await prisma.amenities.create({
     data: {
-      id: uuidv4(), // pass id inside the "data" object
+      id: uuidv4(),
       name,
     },
   });

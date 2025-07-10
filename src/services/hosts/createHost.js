@@ -14,7 +14,7 @@ const createHost = async (
 
   const newHost = await prisma.host.create({
     data: {
-      id: uuidv4(), // pass id inside the "data" object
+      id: uuidv4(),
       username,
       password,
       name,

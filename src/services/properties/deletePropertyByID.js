@@ -12,7 +12,7 @@ const deletePropertyByID = async (id) => {
     where: { id },
   });
 
-  return deletedProperty; // Return the deleted Property
+  return deletedProperty;
 };
 
 export default deletePropertyByID;

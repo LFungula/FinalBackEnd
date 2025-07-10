@@ -14,7 +14,7 @@ const createProperty = async (
 ) => {
   const newProperty = await prisma.property.create({
     data: {
-      id: uuidv4(), // pass id inside the "data" object
+      id: uuidv4(),
       hostId,
       title,
       description,

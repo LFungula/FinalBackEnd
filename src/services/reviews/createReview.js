@@ -6,7 +6,7 @@ const createReview = async (userId, propertyId, rating, comment) => {
 
   const newReview = await prisma.review.create({
     data: {
-      id: uuidv4(), // pass id inside the "data" object
+      id: uuidv4(),
       userId,
       propertyId,
       rating,

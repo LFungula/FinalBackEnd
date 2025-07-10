@@ -13,7 +13,7 @@ const deleteHostByID = async (id) => {
     where: { id },
   });
 
-  return deletedHost; // Return the deleted Host
+  return deletedHost;
 };
 
 export default deleteHostByID;

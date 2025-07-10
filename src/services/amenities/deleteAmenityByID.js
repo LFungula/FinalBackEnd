@@ -14,7 +14,7 @@ const deleteAmenityByID = async (id) => {
     where: { id },
   });
 
-  return deletedAmenity; // Return the deleted amenity
+  return deletedAmenity;
 };
 
 export default deleteAmenityByID;
