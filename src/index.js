@@ -54,12 +54,17 @@ app.use("/properties", propertiesRouter);
 app.use("/reviews", reviewsRouter);
 app.use("/users", usersRouter);
 
-app.get("/debug-sentry", function mainHandler(req, res) {
-  throw new Error("My first Sentry error!");
-});
+// app.get("/debug-sentry", function mainHandler(req, res) {
+//   throw new Error("My first Sentry error!");
+// });
 
 //Login
 app.use("/login", loginRtouter);
+
+//main:
+app.get("/", (req, res) => {
+  res.send("Backend Final Lin Fungula");
+});
 
 //error:
 app.get("/debug-sentry", function mainHandler(req, res) {

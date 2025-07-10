@@ -4,11 +4,11 @@ import getReviewByID from "../services/reviews/getReviewByID.js";
 import updateReviewByID from "../services/reviews/updateReviewByID.js";
 import deleteReviewByID from "../services/reviews/deleteReviewByID.js";
 import createReview from "../services/reviews/createReview.js";
-//import auth from "../middleware/auth.js";
+import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
   try {
     const { userId, propertyId, rating, comment } = req.body;
     const newReview = await createReview(userId, propertyId, rating, comment);
@@ -43,7 +43,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", auth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const review = await deleteReviewByID(id);
@@ -59,7 +59,7 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", auth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const { userId, propertyId, rating, comment } = req.body;

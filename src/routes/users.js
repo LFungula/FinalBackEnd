@@ -4,11 +4,11 @@ import getUserByID from "../services/users/getUserByID.js";
 import updateUserByID from "../services/users/updateUserByID.js";
 import deleteUserByID from "../services/users/deleteUserByID.js";
 import createUser from "../services/users/createUser.js";
-//import auth from "../middleware/auth.js";
+import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
   try {
     const { username, password, name, email, phoneNumber, profilePicture } =
       req.body;
@@ -50,7 +50,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", auth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const user = await deleteUserByID(id);
@@ -64,7 +64,7 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", auth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const { username, password, name, email, phoneNumber, profilePicture } =

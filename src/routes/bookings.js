@@ -4,11 +4,11 @@ import getBookingByID from "../services/bookings/getBookingByID.js";
 import updateBookingByID from "../services/bookings/updateBookingByID.js";
 import deleteBookingByID from "../services/bookings/deleteBookingByID.js";
 import createBooking from "../services/bookings/createBooking.js";
-//import auth from "../middleware/auth.js";
+import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
   try {
     const {
       userId,
@@ -60,7 +60,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", auth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const booking = await deleteBookingByID(id);
@@ -76,7 +76,7 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", auth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const {

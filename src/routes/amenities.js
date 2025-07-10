@@ -4,11 +4,11 @@ import getAmenityByID from "../services/amenities/getAmenityByID.js";
 import updatedAmenityByID from "../services/amenities/updatedAmenityByID.js";
 import deleteAmenityByID from "../services/amenities/deleteAmenityByID.js";
 import createAmenity from "../services/amenities/createAmenity.js";
-//import auth from "../middleware/auth.js";
+import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
   try {
     const { name } = req.body;
     const newAmenity = await createAmenity(name);
@@ -44,7 +44,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", auth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const amenity = await deleteAmenityByID(id);
@@ -60,7 +60,7 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", auth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const { name } = req.body;

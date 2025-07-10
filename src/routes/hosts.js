@@ -4,11 +4,11 @@ import getHostByID from "../services/hosts/getHostByID.js";
 import updateHostByID from "../services/hosts/updateHostByID.js";
 import deleteHostByID from "../services/hosts/deleteHostByID.js";
 import createHost from "../services/hosts/createHost.js";
-//import auth from "../middleware/auth.js";
+import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
   try {
     const {
       username,
@@ -58,7 +58,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", auth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const host = await deleteHostByID(id);
@@ -72,7 +72,7 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", auth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const {
