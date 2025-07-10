@@ -12,6 +12,16 @@ const getProperties = async (location, pricePerNight) => {
     },
   });
 
+  if (!property) {
+    console.warn(`Property not found.`);
+    return null;
+  }
+
+  if (property.length === 0) {
+    console.warn(`Property not found.`);
+    return null;
+  }
+
   return property;
 };
 

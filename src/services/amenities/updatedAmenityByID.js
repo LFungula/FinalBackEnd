@@ -10,12 +10,19 @@ const updatedAmenityByID = async (id, name) => {
     return null;
   }
 
-  const PatchedAmenity = await prisma.amenities.update({
+  const updateAmenitiy = await prisma.amenities.update({
     where: { id },
     data: { name },
   });
 
-  return PatchedAmenity;
+  if (!updateAmenitiy || updateUser.count === 0) {
+    throw new NotFoundError("user", id);
+  }
+
+  return {
+    updateAmenitiy,
+    message: `User with id ${id} was updated!`,
+  };
 };
 
 export default updatedAmenityByID;

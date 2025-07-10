@@ -35,6 +35,7 @@ const updateUserByID = async (
   }
 
   return {
+    updateUser,
     message: `User with id ${id} was updated!`,
   };
 };
