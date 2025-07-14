@@ -11,6 +11,11 @@ const router = Router();
 router.post("/", auth, async (req, res, next) => {
   try {
     const { name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ message: `missing name` });
+    }
+
     const newAmenity = await createAmenity(name);
     res.status(201).json(newAmenity);
   } catch (error) {

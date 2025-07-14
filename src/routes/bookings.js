@@ -45,7 +45,9 @@ router.post("/", auth, async (req, res, next) => {
     }
 
     if (missingFields.length > 0) {
-      res.status(400).json({ message: `missing fields ${missingFields}` });
+      return res
+        .status(400)
+        .json({ message: `missing fields ${missingFields}` });
     }
 
     const newBooking = await createBooking(

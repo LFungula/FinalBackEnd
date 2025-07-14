@@ -35,7 +35,9 @@ router.post("/", auth, async (req, res, next) => {
     }
 
     if (missingFields.length > 0) {
-      res.status(400).json({ message: `missing fields ${missingFields}` });
+      return res
+        .status(400)
+        .json({ message: `missing fields ${missingFields}` });
     }
 
     const newUser = await createUser(
@@ -55,6 +57,7 @@ router.post("/", auth, async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const { username, email } = req.query;
+
     const users = await getUsers(username, email);
     res.status(200).json(users);
   } catch (error) {
