@@ -19,6 +19,35 @@ router.post("/", auth, async (req, res, next) => {
       profilePicture,
       aboutMe,
     } = req.body;
+
+    const missingFields = [];
+
+    if (!username) {
+      missingFields.push("username");
+    }
+    if (!password) {
+      missingFields.push("password");
+    }
+    if (!name) {
+      missingFields.push("name");
+    }
+    if (!email) {
+      missingFields.push("email");
+    }
+    if (!phoneNumber) {
+      missingFields.push("phoneNumber");
+    }
+    if (!profilePicture) {
+      missingFields.push("profilePicture");
+    }
+    if (!aboutMe) {
+      missingFields.push("aboutMe");
+    }
+
+    if (missingFields.length > 0) {
+      res.status(400).json({ message: `missing fields ${missingFields}` });
+    }
+
     const newHost = await createHost(
       username,
       password,

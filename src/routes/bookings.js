@@ -19,6 +19,35 @@ router.post("/", auth, async (req, res, next) => {
       totalPrice,
       bookingStatus,
     } = req.body;
+
+    const missingFields = [];
+
+    if (!userId) {
+      missingFields.push("userId");
+    }
+    if (!propertyId) {
+      missingFields.push("propertyId");
+    }
+    if (!checkinDate) {
+      missingFields.push("checkinDate");
+    }
+    if (!checkoutDate) {
+      missingFields.push("checkoutDate");
+    }
+    if (!numberOfGuests) {
+      missingFields.push("numberOfGuests");
+    }
+    if (!totalPrice) {
+      missingFields.push("totalPrice");
+    }
+    if (!bookingStatus) {
+      missingFields.push("bookingStatus");
+    }
+
+    if (missingFields.length > 0) {
+      res.status(400).json({ message: `missing fields ${missingFields}` });
+    }
+
     const newBooking = await createBooking(
       userId,
       propertyId,

@@ -11,6 +11,25 @@ const router = Router();
 router.post("/", auth, async (req, res, next) => {
   try {
     const { userId, propertyId, rating, comment } = req.body;
+    const missingFields = [];
+
+    if (!userId) {
+      missingFields.push("userId");
+    }
+    if (!propertyId) {
+      missingFields.push("propertyId");
+    }
+    if (!rating) {
+      missingFields.push("rating");
+    }
+    if (!comment) {
+      missingFields.push("comment");
+    }
+
+    if (missingFields.length > 0) {
+      res.status(400).json({ message: `missing fields ${missingFields}` });
+    }
+
     const newReview = await createReview(userId, propertyId, rating, comment);
     res.status(201).json(newReview);
   } catch (error) {
