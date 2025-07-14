@@ -43,12 +43,18 @@ const checkMissingFields = (
 
 const checkFieldValues = (email, phoneNumber, profilePicture) => {
   const incorrectFields = [];
+
+  const phoneRegex =
+    /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+
+  if (!phoneRegex.test(phoneNumber)) {
+    incorrectFields.push("phoneNumber");
+  }
+
   if (!validator.isEmail(email)) {
     incorrectFields.push("email");
   }
-  if (!validator.isMobilePhone(phoneNumber)) {
-    incorrectFields.push("phoneNumber");
-  }
+
   if (!validator.isURL(profilePicture)) {
     incorrectFields.push("profilePicture");
   }
@@ -144,20 +150,6 @@ router.put("/:id", auth, async (req, res, next) => {
     const { id } = req.params;
     const { username, password, name, email, phoneNumber, profilePicture } =
       req.body;
-
-    const missingFields = checkMissingFields(
-      username,
-      password,
-      name,
-      email,
-      phoneNumber,
-      profilePicture
-    );
-    if (missingFields.length > 0) {
-      return res
-        .status(400)
-        .json({ message: `missing fields ${missingFields}` });
-    }
 
     const incorrectFields = checkFieldValues(
       email,
