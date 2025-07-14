@@ -2,7 +2,7 @@ import * as Sentry from "@sentry/node";
 
 // Ensure to call this before importing any other modules!
 Sentry.init({
-  dsn: "https://880ddb69c8f3322d76089dc9e1113d23@o4509592520294400.ingest.de.sentry.io/4509592596250705",
+  dsn: process.env.SENTRY_DSN,
 
   // Add Tracing by setting tracesSampleRate
   // We recommend adjusting this value in production

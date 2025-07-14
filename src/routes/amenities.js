@@ -64,7 +64,7 @@ router.put("/:id", auth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
-    const amenity = await updatedAmenityByID(id, { name });
+    const amenity = await updatedAmenityByID(id, name);
 
     if (!amenity) {
       return res

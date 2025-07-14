@@ -12,6 +12,32 @@ router.post("/", auth, async (req, res, next) => {
   try {
     const { username, password, name, email, phoneNumber, profilePicture } =
       req.body;
+
+    const missingFields = [];
+
+    if (!username) {
+      missingFields.push("username");
+    }
+    if (!password) {
+      missingFields.push("password");
+    }
+    if (!name) {
+      missingFields.push("name");
+    }
+    if (!email) {
+      missingFields.push("email");
+    }
+    if (!phoneNumber) {
+      missingFields.push("phoneNumber");
+    }
+    if (!profilePicture) {
+      missingFields.push("profilePicture");
+    }
+
+    if (missingFields.length > 0) {
+      res.status(400).json({ message: `missing fields ${missingFields}` });
+    }
+
     const newUser = await createUser(
       username,
       password,
