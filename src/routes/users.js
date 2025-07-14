@@ -5,39 +5,85 @@ import updateUserByID from "../services/users/updateUserByID.js";
 import deleteUserByID from "../services/users/deleteUserByID.js";
 import createUser from "../services/users/createUser.js";
 import auth from "../middleware/auth.js";
+import validator from "validator";
 
 const router = Router();
+
+const checkMissingFields = (
+  username,
+  password,
+  name,
+  email,
+  phoneNumber,
+  profilePicture
+) => {
+  const missingFields = [];
+
+  if (!username) {
+    missingFields.push("username");
+  }
+  if (!password) {
+    missingFields.push("password");
+  }
+  if (!name) {
+    missingFields.push("name");
+  }
+  if (!email) {
+    missingFields.push("email");
+  }
+  if (!phoneNumber) {
+    missingFields.push("phoneNumber");
+  }
+  if (!profilePicture) {
+    missingFields.push("profilePicture");
+  }
+
+  return missingFields;
+};
+
+const checkFieldValues = (email, phoneNumber, profilePicture) => {
+  const incorrectFields = [];
+  if (!validator.isEmail(email)) {
+    incorrectFields.push("email");
+  }
+  if (!validator.isMobilePhone(phoneNumber)) {
+    incorrectFields.push("phoneNumber");
+  }
+  if (!validator.isURL(profilePicture)) {
+    incorrectFields.push("profilePicture");
+  }
+  return incorrectFields;
+};
 
 router.post("/", auth, async (req, res, next) => {
   try {
     const { username, password, name, email, phoneNumber, profilePicture } =
       req.body;
 
-    const missingFields = [];
-
-    if (!username) {
-      missingFields.push("username");
-    }
-    if (!password) {
-      missingFields.push("password");
-    }
-    if (!name) {
-      missingFields.push("name");
-    }
-    if (!email) {
-      missingFields.push("email");
-    }
-    if (!phoneNumber) {
-      missingFields.push("phoneNumber");
-    }
-    if (!profilePicture) {
-      missingFields.push("profilePicture");
-    }
-
+    const missingFields = checkMissingFields(
+      username,
+      password,
+      name,
+      email,
+      phoneNumber,
+      profilePicture
+    );
     if (missingFields.length > 0) {
       return res
         .status(400)
-        .json({ message: `missing fields ${missingFields}` });
+        .json({ message: `Missing fields ${missingFields}` });
+    }
+
+    const incorrectFields = checkFieldValues(
+      email,
+      phoneNumber,
+      profilePicture
+    );
+
+    if (incorrectFields.length > 0) {
+      return res
+        .status(422)
+        .json({ message: `Incorrect values for fields: ${incorrectFields}` });
     }
 
     const newUser = await createUser(
@@ -98,6 +144,33 @@ router.put("/:id", auth, async (req, res, next) => {
     const { id } = req.params;
     const { username, password, name, email, phoneNumber, profilePicture } =
       req.body;
+
+    const missingFields = checkMissingFields(
+      username,
+      password,
+      name,
+      email,
+      phoneNumber,
+      profilePicture
+    );
+    if (missingFields.length > 0) {
+      return res
+        .status(400)
+        .json({ message: `missing fields ${missingFields}` });
+    }
+
+    const incorrectFields = checkFieldValues(
+      email,
+      phoneNumber,
+      profilePicture
+    );
+
+    if (incorrectFields.length > 0) {
+      return res
+        .status(422)
+        .json({ message: `Incorrect values for fields: ${incorrectFields}` });
+    }
+
     const user = await updateUserByID(
       id,
       username,
