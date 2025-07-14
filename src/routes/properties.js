@@ -5,8 +5,59 @@ import updatePropertyByID from "../services/properties/updatePropertyByID.js";
 import deletePropertyByID from "../services/properties/deletePropertyByID.js";
 import createProperty from "../services/properties/createProperty.js";
 import auth from "../middleware/auth.js";
+import { PrismaClient } from "@prisma/client";
 
 const router = Router();
+const prisma = new PrismaClient();
+
+const checkFieldValues = async (
+  hostId,
+  pricePerNight,
+  bedroomCount,
+  bathRoomCount,
+  maxGuestCount,
+  rating
+) => {
+  const incorrectFields = [];
+
+  const host = await prisma.host.findFirst({ where: { id: hostId } });
+
+  if (!host) {
+    incorrectFields.push(
+      "hostId: hostId not found, system is expecting an existing host"
+    );
+  }
+
+  if (typeof pricePerNight !== "number" || pricePerNight <= 0) {
+    incorrectFields.push(
+      "pricePerNight: pricePerNight must be a Number over 0"
+    );
+  }
+
+  if (typeof bedroomCount !== "number" || bedroomCount < 0) {
+    incorrectFields.push(
+      "bedroomCount: bedroomCount must be a positive Number"
+    );
+  }
+
+  if (typeof bathRoomCount !== "number" || bathRoomCount < 0) {
+    incorrectFields.push(
+      "bathRoomCount: bedroomCount must be a positive Number "
+    );
+  }
+
+  if (typeof maxGuestCount !== "number" || maxGuestCount <= 0) {
+    incorrectFields.push(
+      "bedroomCount: bedroomCount must be a positive Number"
+    );
+  }
+
+  if (typeof rating !== "number" || rating < 0 || rating > 5) {
+    incorrectFields.push("rating: rating must be a Number between 0 and 5");
+  }
+
+  return incorrectFields;
+};
 
 router.post("/", auth, async (req, res, next) => {
   try {
@@ -56,6 +107,21 @@ router.post("/", auth, async (req, res, next) => {
       return res
         .status(400)
         .json({ message: `missing fields ${missingFields}` });
+    }
+
+    const incorrectFields = await checkFieldValues(
+      hostId,
+      pricePerNight,
+      bedroomCount,
+      bathRoomCount,
+      maxGuestCount,
+      rating
+    );
+
+    if (incorrectFields.length > 0) {
+      return res
+        .status(422)
+        .json({ message: `Incorrect values for fields: ${incorrectFields}` });
     }
 
     const newProperty = await createProperty(
@@ -131,6 +197,22 @@ router.put("/:id", auth, async (req, res, next) => {
       maxGuestCount,
       rating,
     } = req.body;
+
+    const incorrectFields = await checkFieldValues(
+      hostId,
+      pricePerNight,
+      bedroomCount,
+      bathRoomCount,
+      maxGuestCount,
+      rating
+    );
+
+    if (incorrectFields.length > 0) {
+      return res
+        .status(422)
+        .json({ message: `Incorrect values for fields: ${incorrectFields}` });
+    }
+
     const property = await updatePropertyByID(
       id,
       hostId,
