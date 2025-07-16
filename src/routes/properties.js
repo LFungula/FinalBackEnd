@@ -10,6 +10,49 @@ import { PrismaClient } from "@prisma/client";
 const router = Router();
 const prisma = new PrismaClient();
 
+const checkMissingFields = (
+  hostId,
+  title,
+  description,
+  location,
+  pricePerNight,
+  bedroomCount,
+  bathRoomCount,
+  maxGuestCount,
+  rating
+) => {
+  const missingFields = [];
+
+  if (!hostId) {
+    missingFields.push("hostId");
+  }
+  if (!title) {
+    missingFields.push("title");
+  }
+  if (!description) {
+    missingFields.push("description");
+  }
+  if (!location) {
+    missingFields.push("location");
+  }
+  if (!pricePerNight) {
+    missingFields.push("pricePerNight");
+  }
+  if (!bedroomCount) {
+    missingFields.push("bedroomCount");
+  }
+  if (!bathRoomCount) {
+    missingFields.push("bathRoomCount");
+  }
+  if (!maxGuestCount) {
+    missingFields.push("maxGuestCount");
+  }
+  if (!rating) {
+    missingFields.push("rating");
+  }
+  return missingFields;
+};
+
 const checkFieldValues = async (
   hostId,
   pricePerNight,
@@ -73,35 +116,17 @@ router.post("/", auth, async (req, res, next) => {
       rating,
     } = req.body;
 
-    const missingFields = [];
-
-    if (!hostId) {
-      missingFields.push("hostId");
-    }
-    if (!title) {
-      missingFields.push("title");
-    }
-    if (!description) {
-      missingFields.push("description");
-    }
-    if (!location) {
-      missingFields.push("location");
-    }
-    if (!pricePerNight) {
-      missingFields.push("pricePerNight");
-    }
-    if (!bedroomCount) {
-      missingFields.push("bedroomCount");
-    }
-    if (!bathRoomCount) {
-      missingFields.push("bathRoomCount");
-    }
-    if (!maxGuestCount) {
-      missingFields.push("maxGuestCount");
-    }
-    if (!rating) {
-      missingFields.push("rating");
-    }
+    const missingFields = checkMissingFields(
+      hostId,
+      title,
+      description,
+      location,
+      pricePerNight,
+      bedroomCount,
+      bathRoomCount,
+      maxGuestCount,
+      rating
+    );
 
     if (missingFields.length > 0) {
       return res

@@ -10,6 +10,24 @@ import { PrismaClient } from "@prisma/client";
 const router = Router();
 const prisma = new PrismaClient();
 
+const checkMissingFields = (userId, propertyId, rating, comment) => {
+  const missingFields = [];
+
+  if (!userId) {
+    missingFields.push("userId");
+  }
+  if (!propertyId) {
+    missingFields.push("propertyId");
+  }
+  if (!rating) {
+    missingFields.push("rating");
+  }
+  if (!comment) {
+    missingFields.push("comment");
+  }
+  return missingFields;
+};
+
 const checkFieldValues = async (userId, propertyId, rating) => {
   const incorrectFields = [];
 
@@ -41,21 +59,13 @@ const checkFieldValues = async (userId, propertyId, rating) => {
 router.post("/", auth, async (req, res, next) => {
   try {
     const { userId, propertyId, rating, comment } = req.body;
-    const missingFields = [];
 
-    if (!userId) {
-      missingFields.push("userId");
-    }
-    if (!propertyId) {
-      missingFields.push("propertyId");
-    }
-    if (!rating) {
-      missingFields.push("rating");
-    }
-    if (!comment) {
-      missingFields.push("comment");
-    }
-
+    const missingFields = checkMissingFields(
+      userId,
+      propertyId,
+      rating,
+      comment
+    );
     if (missingFields.length > 0) {
       return res
         .status(400)

@@ -10,6 +10,42 @@ import { PrismaClient } from "@prisma/client";
 const router = Router();
 const prisma = new PrismaClient();
 
+const checkMissingFields = (
+  userId,
+  propertyId,
+  checkinDate,
+  checkoutDate,
+  numberOfGuests,
+  totalPrice,
+  bookingStatus
+) => {
+  const missingFields = [];
+
+  if (!userId) {
+    missingFields.push("userId");
+  }
+  if (!propertyId) {
+    missingFields.push("propertyId");
+  }
+  if (!checkinDate) {
+    missingFields.push("checkinDate");
+  }
+  if (!checkoutDate) {
+    missingFields.push("checkoutDate");
+  }
+  if (!numberOfGuests) {
+    missingFields.push("numberOfGuests");
+  }
+  if (!totalPrice) {
+    missingFields.push("totalPrice");
+  }
+  if (!bookingStatus) {
+    missingFields.push("bookingStatus");
+  }
+
+  return missingFields;
+};
+
 const checkFieldValues = async (
   userId,
   propertyId,
@@ -102,29 +138,15 @@ router.post("/", auth, async (req, res, next) => {
       bookingStatus,
     } = req.body;
 
-    const missingFields = [];
-
-    if (!userId) {
-      missingFields.push("userId");
-    }
-    if (!propertyId) {
-      missingFields.push("propertyId");
-    }
-    if (!checkinDate) {
-      missingFields.push("checkinDate");
-    }
-    if (!checkoutDate) {
-      missingFields.push("checkoutDate");
-    }
-    if (!numberOfGuests) {
-      missingFields.push("numberOfGuests");
-    }
-    if (!totalPrice) {
-      missingFields.push("totalPrice");
-    }
-    if (!bookingStatus) {
-      missingFields.push("bookingStatus");
-    }
+    const missingFields = checkMissingFields(
+      userId,
+      propertyId,
+      checkinDate,
+      checkoutDate,
+      numberOfGuests,
+      totalPrice,
+      bookingStatus
+    );
 
     if (missingFields.length > 0) {
       return res
