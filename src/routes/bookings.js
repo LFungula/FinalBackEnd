@@ -5,8 +5,90 @@ import updateBookingByID from "../services/bookings/updateBookingByID.js";
 import deleteBookingByID from "../services/bookings/deleteBookingByID.js";
 import createBooking from "../services/bookings/createBooking.js";
 import auth from "../middleware/auth.js";
+import { PrismaClient } from "@prisma/client";
 
 const router = Router();
+const prisma = new PrismaClient();
+
+const checkFieldValues = async (
+  userId,
+  propertyId,
+  checkinDate,
+  checkoutDate,
+  numberOfGuests,
+  totalPrice,
+  bookingStatus
+) => {
+  const incorrectFields = [];
+
+  const dateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$/;
+
+  const existingUserID = await prisma.user.findFirst({ where: { id: userId } });
+  if (!existingUserID) {
+    incorrectFields.push(
+      "userId: userId not found, system is expecting an existing user"
+    );
+  }
+
+  const existtingPropertyID = await prisma.property.findFirst({
+    where: { id: propertyId },
+  });
+  if (!existtingPropertyID) {
+    incorrectFields.push(
+      "propertyId: propertyId not found, system is expecting an existing property"
+    );
+  }
+  if (
+    existtingPropertyID &&
+    existtingPropertyID.maxGuestCount < numberOfGuests
+  ) {
+    incorrectFields.push(
+      "numberOfGuests: numberOfGuests exceeds the maximum guests allowd in the property"
+    );
+  }
+
+  if (!dateTimeRegex.test(checkinDate)) {
+    incorrectFields.push(
+      `checkinDate: checkinDate is not formatted correctly. system expects dateTime formatting in ISO 8601 like: '2023-07-20T13:00:00.000Z' /  'yyyy-mm-ddThh:mm:ss.milmilmilZ' `
+    );
+  }
+
+  if (!dateTimeRegex.test(checkoutDate)) {
+    incorrectFields.push(
+      `checkoutDate: checkoutDate is not formatted correctly. system expects dateTime formatting in ISO 8601 like: '2023-07-20T13:00:00.000Z' /  'yyyy-mm-ddThh:mm:ss.milmilmilZ' `
+    );
+  }
+
+  const checkinDateForComparison = new Date(checkinDate); // Convert to Date object for comparison
+  const checkoutDateForComparison = new Date(checkoutDate); // Convert to Date object for comparison
+
+  if (checkinDateForComparison >= checkoutDateForComparison) {
+    incorrectFields.push(
+      "checkinDate: checkinDate must be before checkoutDate"
+    );
+  }
+
+  if (numberOfGuests && typeof numberOfGuests !== "number") {
+    incorrectFields.push(
+      "numberOfGuests: datatype of numberOfGuests must be Number"
+    );
+  }
+
+  if (totalPrice && typeof totalPrice !== "number") {
+    incorrectFields.push("totalPrice: datatype of totalPrice must be Number");
+  }
+
+  if (
+    bookingStatus &&
+    !["confirmed", "canceled", "pending", "updated"].includes(bookingStatus)
+  ) {
+    incorrectFields.push(
+      `bookingStatus:bookingStatus must be 'confirmed', 'canceled', 'pending' or updated, bookingStatus now is: '${bookingStatus}'`
+    );
+  }
+
+  return incorrectFields;
+};
 
 router.post("/", auth, async (req, res, next) => {
   try {
@@ -48,6 +130,22 @@ router.post("/", auth, async (req, res, next) => {
       return res
         .status(400)
         .json({ message: `missing fields ${missingFields}` });
+    }
+
+    const incorrectFields = await checkFieldValues(
+      userId,
+      propertyId,
+      checkinDate,
+      checkoutDate,
+      numberOfGuests,
+      totalPrice,
+      bookingStatus
+    );
+
+    if (incorrectFields.length > 0) {
+      return res
+        .status(422)
+        .json({ message: `Incorrect values for fields: ${incorrectFields}` });
     }
 
     const newBooking = await createBooking(
@@ -119,6 +217,23 @@ router.put("/:id", auth, async (req, res, next) => {
       totalPrice,
       bookingStatus,
     } = req.body;
+
+    const incorrectFields = await checkFieldValues(
+      userId,
+      propertyId,
+      checkinDate,
+      checkoutDate,
+      numberOfGuests,
+      totalPrice,
+      bookingStatus
+    );
+
+    if (incorrectFields.length > 0) {
+      return res
+        .status(422)
+        .json({ message: `Incorrect values for fields: ${incorrectFields}` });
+    }
+
     const booking = await updateBookingByID(
       id,
       userId,
