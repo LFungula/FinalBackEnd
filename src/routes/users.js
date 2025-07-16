@@ -6,8 +6,10 @@ import deleteUserByID from "../services/users/deleteUserByID.js";
 import createUser from "../services/users/createUser.js";
 import auth from "../middleware/auth.js";
 import validator from "validator";
+import { PrismaClient } from "@prisma/client";
 
 const router = Router();
+const prisma = new PrismaClient();
 
 const checkMissingFields = (
   username,
@@ -48,16 +50,17 @@ const checkFieldValues = (email, phoneNumber, profilePicture) => {
     /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
 
   if (!phoneRegex.test(phoneNumber)) {
-    incorrectFields.push("phoneNumber");
+    incorrectFields.push("phoneNumber: phoneNumber is not formatted correctly");
   }
 
   if (!validator.isEmail(email)) {
-    incorrectFields.push("email");
+    incorrectFields.push("email: email is not formatted correctly");
   }
 
   if (!validator.isURL(profilePicture)) {
-    incorrectFields.push("profilePicture");
+    incorrectFields.push("profilePicture: profilePicture must be a link");
   }
+
   return incorrectFields;
 };
 
@@ -83,13 +86,24 @@ router.post("/", auth, async (req, res, next) => {
     const incorrectFields = checkFieldValues(
       email,
       phoneNumber,
-      profilePicture
+      profilePicture,
+      username
     );
 
     if (incorrectFields.length > 0) {
       return res
         .status(422)
         .json({ message: `Incorrect values for fields: ${incorrectFields}` });
+    }
+
+    const user = await prisma.user.findFirst({ where: { username: username } });
+    if (user) {
+      return res
+        .status(422)
+        .json({
+          message:
+            "username: username is already in use. username must be unique",
+        });
     }
 
     const newUser = await createUser(
