@@ -13,8 +13,8 @@ const prisma = new PrismaClient();
 const checkFieldValues = async (userId, propertyId, rating) => {
   const incorrectFields = [];
 
-  const user = await prisma.user.findFirst({ where: { id: userId } });
-  if (!user) {
+  const existingUserID = await prisma.user.findFirst({ where: { id: userId } });
+  if (!existingUserID) {
     incorrectFields.push(
       "userId: userId not found, system is expecting an existing user"
     );
