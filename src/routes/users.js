@@ -96,14 +96,14 @@ router.post("/", auth, async (req, res, next) => {
         .json({ message: `Incorrect values for fields: ${incorrectFields}` });
     }
 
-    const user = await prisma.user.findFirst({ where: { username: username } });
-    if (user) {
-      return res
-        .status(422)
-        .json({
-          message:
-            "username: username is already in use. username must be unique",
-        });
+    const existingUser = await prisma.user.findFirst({
+      where: { username: username },
+    });
+    if (existingUser) {
+      return res.status(422).json({
+        message:
+          "username: username is already in use. username must be unique",
+      });
     }
 
     const newUser = await createUser(

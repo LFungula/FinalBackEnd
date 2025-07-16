@@ -47,11 +47,15 @@ const checkMissingFields = (
   return missingFields;
 };
 
-const checkFieldValues = async (email) => {
+const checkFieldValues = async (email, profilePicture) => {
   const incorrectFields = [];
 
   if (!validator.isEmail(email)) {
     incorrectFields.push("email: email is not formatted correctly");
+  }
+
+  if (!validator.isURL(profilePicture)) {
+    incorrectFields.push("profilePicture: profilePicture must be a link");
   }
 
   return incorrectFields;
@@ -85,7 +89,7 @@ router.post("/", auth, async (req, res, next) => {
         .json({ message: `missing fields ${missingFields}` });
     }
 
-    const incorrectFields = await checkFieldValues(email);
+    const incorrectFields = await checkFieldValues(email, profilePicture);
 
     if (incorrectFields.length > 0) {
       return res
@@ -167,7 +171,7 @@ router.put("/:id", auth, async (req, res, next) => {
       aboutMe,
     } = req.body;
 
-    const incorrectFields = await checkFieldValues(email);
+    const incorrectFields = await checkFieldValues(email, profilePicture);
 
     if (incorrectFields.length > 0) {
       return res
